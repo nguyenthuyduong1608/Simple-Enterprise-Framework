@@ -1,0 +1,222 @@
+package ui.scene;
+
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import ui.tool.ConvertUtil;
+import ui.Main;
+import ui.viewmodel.*;
+import ui.tool.SceneUtils;
+import dao.%table%Dao;
+import entity.%table%;
+
+import java.util.List;
+import java.net.URL;
+import java.util.ResourceBundle;
+import static ui.Main.*;
+public class %table%Scene extends BaseSceneTemplate implements Initializable {
+    @FXML
+    private JFXTreeTableView<%table%ViewModel> table;
+    @FXML
+    private VBox fieldContainer;
+    @FXML
+    private JFXListView tableList;
+
+    %annotationFXML%
+
+    //@FXML
+    //StackPane rootPane;
+    @FXML
+    private JFXButton deleteButton;
+    @FXML
+    private VBox rightPane;
+    @FXML
+    JFXButton addButton;
+    @FXML
+    JFXButton approveButton;
+    @FXML
+    private JFXButton searchButton;
+    @FXML
+    private JFXButton settingButton;
+    @FXML
+    private ImageView profilePicture;
+
+    private List<%table%> list;
+
+    private final ObservableList<%table%ViewModel> data = FXCollections.observableArrayList();
+
+    private final ContextMenu contextMenu = new ContextMenu();
+
+    boolean isUpdate = true;
+
+    // Handle select table
+    @FXML
+    private void handleMousePressed() {
+        int index = this.table.getSelectionModel().getSelectedIndex();
+
+        %getFieldOfData%
+
+        if (this.table.getSelectionModel().getSelectedIndex() != -1) {
+            this.isUpdate = true;
+            this.rightPane.setDisable(false);
+            this.deleteButton.setVisible(true);
+            this.approveButton.setText("Edit");
+        }
+    }
+
+    @FXML
+    private void deleteRow(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        boolean result = SceneUtils.getInstance().showConfirm(stage, "Confirmation", "Are you sure to delete this row?");
+        if (result) {
+             try{
+                %table%Dao dao = new %table%Dao();
+                dao.delete(list.get(table.getSelectionModel().getSelectedIndex()));
+                fetchData();
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Update database success");
+
+                clearFields();
+                this.rightPane.setDisable(true);
+            } catch (Exception e){
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Add database success");
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    @FXML
+    private void addRow() {
+        this.isUpdate = false;
+        this.rightPane.setDisable(false);
+        this.clearFields();
+        this.deleteButton.setVisible(false);
+        this.approveButton.setText("Add");
+    }
+
+    private void clearFields() {
+        ObservableList<Node> textFields = this.fieldContainer.getChildren();
+        for (Node node : textFields) {
+            JFXTextField textField = (JFXTextField) node;
+            textField.setText("");
+        }
+    }
+
+    private %table%ViewModel getViewModel(){
+        return new %table%ViewModel(%getFieldToCreateVM%
+        );
+    }
+
+    // Convert from ViewModel to Entity for using
+    private %table% convertFromViewModelToEntity(%table%ViewModel model){
+        %table% res = new %table%();
+
+%getFieldToConvertEntity%
+
+        return res;
+    }
+
+    @FXML
+    private void approveModify() {
+        // Add or update
+        if (isUpdate) {
+            try{
+                %table%Dao dao = new %table%Dao();
+                dao.delete(list.get(table.getSelectionModel().getSelectedIndex()));
+                dao.insert(convertFromViewModelToEntity(getViewModel()));
+                fetchData();
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Update database success");
+                //dao.close();
+            } catch (Exception e){
+                SceneUtils.getInstance().showDialog(this.rootPane, "Failed", "Edit database failed");
+                e.printStackTrace();
+            }
+        } else {
+            try{
+                %table%Dao dao = new %table%Dao();
+                dao.insert(convertFromViewModelToEntity(getViewModel()));
+                fetchData();
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Add database success");
+                //dao.close();
+            } catch (Exception e){
+                SceneUtils.getInstance().showDialog(this.rootPane, "Failed", "Add database failed");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    %switchFunction%
+
+    @FXML
+    private void showContextMenu(MouseEvent event) {
+        if (!this.contextMenu.isShowing()) {
+            this.contextMenu.show(this.profilePicture, event.getScreenX(), event.getScreenY());
+        }
+    }
+
+    private void fetchData() {
+        data.removeAll(data);
+        new Thread(()->{
+            %table%Dao dao = new %table%Dao();
+                    list = dao.getAll();
+
+                    for (%table% model : list) {
+                        data.add(new %table%ViewModel(
+                        %getField%));
+                    }
+                   //dao.close();
+        }).start();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        this.tableList.getSelectionModel().select(Main.getCurrentTab());
+        this.tableList.getFocusModel().focus(Main.getCurrentTab());
+
+        // Init context menu
+        MenuItem logout = new MenuItem("Logout");
+        logout.setOnAction(this::logOut);
+        this.contextMenu.getItems().add(logout);
+
+        fetchData();
+        this.rootPane.setCache(true);
+
+        this.deleteButton.setGraphic(new ImageView("/images/delete.png"));
+        this.searchButton.setGraphic(new ImageView("/images/search.png"));
+        this.settingButton.setGraphic(new ImageView("/images/settings.png"));
+        this.addButton.setGraphic(new ImageView("/images/add.png"));
+
+        %column%
+
+        TreeItem<%table%ViewModel> root = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
+        table.setRoot(root);
+        table.setShowRoot(false);
+        table.setEditable(false);
+        table.getColumns().setAll(%addColumn%);
+
+        if (this.table.getSelectionModel().getSelectedIndex() == -1) {
+            this.rightPane.setDisable(true);
+        }
+    }
+
+    private void logOut(ActionEvent event) {
+        SceneUtils.getInstance().switchScreen(this.rootPane, LOGIN_SCENE_FXML, 100);
+    }
+}
