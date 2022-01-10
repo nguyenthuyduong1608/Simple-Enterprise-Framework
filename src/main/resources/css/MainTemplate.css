@@ -32,8 +32,7 @@
 }
 
 #titleBar {
-    -fx-background-radius: 10 10 0 0;
-    -fx-background-color: #006A8B;
+    -fx-background-color: #2B237C;
 }
 
 #appTitle {
@@ -42,12 +41,12 @@
 }
 
 .titleBarButton {
-    -fx-background-radius: 50;
+    -fx-background-radius: 5;
     -fx-background-color: #4790A7;
 }
 
 #minimizeButton {
-    -fx-background-color: #00ce26;
+    -fx-background-color: #F6e486;
 }
 
 #closeButton {

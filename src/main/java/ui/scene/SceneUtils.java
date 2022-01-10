@@ -111,7 +111,7 @@ public class SceneUtils  {
             try {
                 Thread.sleep(timeout);
             } catch (InterruptedException e) {
-                SceneUtils.getInstance().showDialog(rootPane, "Something wrong", "Please again try later");
+                SceneUtils.getInstance().showDialog(rootPane, "Something went wrong!", e.getMessage());
                 System.err.println(e.getMessage());
             }
             Platform.runLater(() -> {
@@ -119,7 +119,7 @@ public class SceneUtils  {
                     Scene scene = SceneUtils.getInstance().getScene(fxmlPath);
                     SceneUtils.getInstance().getStage(rootPane).setScene(scene);
                 } catch (IOException e) {
-                    SceneUtils.getInstance().showDialog(rootPane, "Something wrong", "Please again try later");
+                    SceneUtils.getInstance().showDialog(rootPane, "Something went wrong!", e.getMessage());
                     System.err.println(e.getMessage());
                 }
             });

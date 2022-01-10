@@ -82,7 +82,7 @@ public class SceneTemplate extends BaseSceneTemplate implements Initializable {
     @FXML
     private void deleteRow(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        boolean result = SceneUtils.getInstance().showConfirm(stage, "Confirmation", "Are you sure to delete this row?");
+        boolean result = SceneUtils.getInstance().showConfirm(stage, "Confirmation", "Are you sure you want to delete this row?");
         if (result) {
             clearFields();
             this.rightPane.setDisable(true);
