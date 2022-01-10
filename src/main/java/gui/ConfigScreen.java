@@ -8,13 +8,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.apache.commons.io.FileUtils;
 import orm.column.Column;
@@ -26,6 +31,7 @@ import ui.generator.*;
 import ui.scene.SceneUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,6 +55,9 @@ public class ConfigScreen implements Initializable {
     @FXML
     private JFXButton browseButton;
 
+    @FXML
+    private JFXButton backButton;
+
     private SqlServer sqlServer;
 
     @FXML
@@ -69,7 +78,7 @@ public class ConfigScreen implements Initializable {
         spinner.setMaxWidth(20);
         this.generateButton.setGraphic(spinner);
 
-        new Thread(()->{
+        new Thread(() -> {
             try {
                 String databaseName = databaseComboBox.getSelectionModel().getSelectedItem();
                 SqlDatabase sqlDatabase = sqlServer.connectToDatabase(databaseName);
@@ -102,7 +111,7 @@ public class ConfigScreen implements Initializable {
                 new MemberGenerator(sqlDatabase.tableList.get(0).getClassName().toLowerCase()).generate(fileDest);
 
                 File base = new File("src\\main\\template\\ui\\BaseSceneTemplate.java");
-                File targetBase = new File(( fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\scene\\BaseSceneTemplate.java"));
+                File targetBase = new File((fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\scene\\BaseSceneTemplate.java"));
                 targetBase.createNewFile();
                 FileUtils.copyFile(base, targetBase);
 
@@ -135,9 +144,9 @@ public class ConfigScreen implements Initializable {
                             fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\viewmodel\\" + table.getClassName() +
                                     "ViewModel.java"));
                 }
-                Platform.runLater(()->SceneUtils.getInstance().showDialog(this.root, "Success", "Your project is generated successfully!"));
+                Platform.runLater(() -> SceneUtils.getInstance().showDialog(this.root, "Success", "Your project is generated successfully!"));
             } catch (Exception e) {
-                Platform.runLater(()->SceneUtils.getInstance().showDialog(this.root, "Failed", e.getMessage()));
+                Platform.runLater(() -> SceneUtils.getInstance().showDialog(this.root, "Failed", e.getMessage()));
                 e.printStackTrace();
             } finally {
                 this.generateButton.setDisable(false);
@@ -164,8 +173,31 @@ public class ConfigScreen implements Initializable {
         browseButton.styleProperty().bind(Bindings.when(browseButton.hoverProperty())
                 .then("-fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
                 .otherwise("-fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
+
         generateButton.styleProperty().bind(Bindings.when(generateButton.hoverProperty())
                 .then("-fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
                 .otherwise("-fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
+    }
+
+    public void backToLogin(ActionEvent event) {
+        new Thread(() -> {
+            Platform.runLater(() -> {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Parent root = null;
+                try {
+                    root = loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                LoginScreen login = loader.getController();
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getResource("/css/MainTemplate.css").toExternalForm());
+                stage.setTitle("CRUD Generation");
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            });
+        }).start();
     }
 }
