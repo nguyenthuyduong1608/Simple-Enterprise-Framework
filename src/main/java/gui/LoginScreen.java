@@ -41,7 +41,7 @@ public class LoginScreen implements Initializable {
     public void connectToDatabase(ActionEvent event) {
         String user = edtUsername.getText();
         String pass = edtPassword.getText();
-        String baseUrl = edtDatabaseUri.getText();
+        String baseUrl = "jdbc:mysql://" + edtDatabaseUri.getText();
 
         new Thread(() -> {
             SqlServer sqlServer = new SqlServer(user, pass, baseUrl);

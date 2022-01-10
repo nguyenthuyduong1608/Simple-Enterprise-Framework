@@ -62,10 +62,16 @@ class Column() {
         if (!isNullable)
             fieldSpecBuilder.addAnnotation(AnnotationSpec.builder(NotNull::class.java).build())
 
-        if (isAutoIncrement)
+        if (isAutoIncrement && !isPrimaryKey)
             fieldSpecBuilder.addAnnotation(
                 AnnotationSpec.builder(GeneratedValue::class.java)
                     .addMember("strategy", "\$T.\$L", GenerationType::class.java, GenerationType.AUTO.name).build()
+            )
+
+        if (isAutoIncrement && isPrimaryKey)
+            fieldSpecBuilder.addAnnotation(
+                AnnotationSpec.builder(GeneratedValue::class.java)
+                    .addMember("strategy", "\$T.\$L", GenerationType::class.java, GenerationType.IDENTITY.name).build()
             )
 
         fieldSpecBuilder.addAnnotation(annotationColumnName)

@@ -10,16 +10,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ViewModelGenerator implements Generatable {
     String table;
     List<String> listField;
-
-    public ViewModelGenerator(String table, List<String> field) {
+    private Map<String, Boolean> isAutoGenerate;
+    public ViewModelGenerator(String table, List<String> field, Map<String, Boolean> isAutoGenerate) {
         this.table = table;
         this.listField = field;
+        this.isAutoGenerate = isAutoGenerate;
     }
 
     @Override
@@ -39,45 +41,78 @@ public class ViewModelGenerator implements Generatable {
 
         String strField = listField
                 .stream()
-                .map(field ->
-                        "private SimpleStringProperty "+field+" = new SimpleStringProperty();\n\t"
-                )
+                .map(field -> "private SimpleStringProperty "+field+" = new SimpleStringProperty();\n\t")
                 .reduce("", (a, b) -> a + b);
 
         String support = listField
                 .stream()
-                .map(field ->
-                        "public String get"+ ToolUtils.convertProp(field)+"() {\n" +
-                                "        return "+field+".get();\n" +
-                                "    }\n"+
-                                "    public SimpleStringProperty "+ToolUtils.convertProp(field)+"Property() {\n" +
-                                "        return "+field+";\n" +
-                                "    }\n" +
+                .map(field ->{
+                    String res = "public String get"+ ToolUtils.convertProp(field)+"() {\n" +
+                            "        return "+field+".get();\n" +
+                            "    }\n"+
+                            "    public SimpleStringProperty "+ToolUtils.convertProp(field)+"Property() {\n" +
+                            "        return "+field+";\n" +
+                            "    }\n";
+                    if (!isAutoGenerate.get(field)) {
+                        res = res +
                                 "    public void set"+ToolUtils.convertProp(field)+"(String field1) {\n" +
                                 "        this."+field+".set(field1);\n" +
-                                "    }\n\n\t"
-                )
+                                "    }\n";
+                    }
+                    return res + "\n\t";
+                })
                 .reduce("", (a, b) -> a + b);
 
         String strConstructorBegin = "public "+table+"ViewModel";
         String strConstructorParams = listField
                 .stream()
-                .map(field ->
-                        "String " + field +", "
-                )
+                .map(field ->{
+                    if (!isAutoGenerate.get(field)) {
+                        return "String " + field +", ";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
         strConstructorParams = strConstructorParams.substring(0, strConstructorParams.length() - 2);
-        System.out.println(strConstructorParams);
         String strConstructorSet = listField
                 .stream()
-                .map(field ->
-                        "       this."+field+".set("+field+");\n"
-                )
+                .map(field ->{
+                    if (!isAutoGenerate.get(field)) {
+                        return "       this."+field+".set("+field+");\n";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
-        String strConstructor =  strConstructorBegin + "(" + strConstructorParams + "){\n"
+        AtomicReference<Boolean> isNoFieldAutoGen = new AtomicReference<>(true);
+        listField.forEach(field -> {
+            if (isAutoGenerate.get(field)) {
+                isNoFieldAutoGen.set(false);
+                return;
+            }
+        });
+        String strConstructorShort =  strConstructorBegin + "(" + strConstructorParams + "){\n"
                 + strConstructorSet
                 + "\t}";
+
+        String strConstructorLong = "";
+        if (!isNoFieldAutoGen.get()) {
+            strConstructorParams = listField
+                    .stream()
+                    .map(field ->"String " + field +", ")
+                    .reduce("", (a, b) -> a + b);
+            strConstructorParams = strConstructorParams.substring(0, strConstructorParams.length() - 2);
+            strConstructorSet = listField
+                    .stream()
+                    .map(field -> "       this."+field+".set("+field+");\n")
+                    .reduce("", (a, b) -> a + b);
+
+            strConstructorLong =  strConstructorBegin + "(" + strConstructorParams + "){\n"
+                    + strConstructorSet
+                    + "\t}";
+        }
+
+        String strConstructor = strConstructorShort + "\n\n    " + strConstructorLong;
 
         System.out.println(strConstructor);
 

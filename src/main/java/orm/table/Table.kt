@@ -82,7 +82,9 @@ class Table() : Generatable {
         columnList.forEach {
             fieldSpecs.add(it.toFieldSpec())
             methodSpecs.add(it.createGetterMethod())
-            methodSpecs.add(it.createSetterMethod())
+            if (!it.isAutoIncrement) {
+                methodSpecs.add(it.createSetterMethod())
+            }
         }
 
         val typeSpecBuilder = TypeSpec.classBuilder(className)
