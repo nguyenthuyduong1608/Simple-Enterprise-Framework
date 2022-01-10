@@ -10,31 +10,31 @@
 
 <StackPane fx:id="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginScreen">
    <children>
-      <AnchorPane prefHeight="768.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #006A8B, #39BBAC);">
+      <AnchorPane prefHeight="768.0" prefWidth="1280.0">
          <children>
-            <AnchorPane fx:id="pneCenter" layoutX="400.0" layoutY="173.0" prefHeight="423.0" prefWidth="480.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-background-color: #ffffff; -fx-background-radius: 10;">
+            <AnchorPane fx:id="pneCenter" layoutX="700.0" layoutY="173.0" prefHeight="423.0" prefWidth="480.0">
                <children>
-                  <Label layoutX="155.0" layoutY="34.0" text="Authentication" textAlignment="CENTER" textFill="#525252">
+                  <Label layoutX="155.0" layoutY="34.0" text="Authentication" textAlignment="CENTER" textFill="#2B237C">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="edtUsername" focusColor="#006a8b" labelFloat="true" layoutX="37.0" layoutY="95.0" prefHeight="38.0" prefWidth="400.0" promptText="Username">
+                  <JFXTextField fx:id="edtUsername" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="95.0" prefHeight="38.0" prefWidth="400.0" promptText="Username">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </JFXTextField>
-                  <JFXPasswordField fx:id="edtPassword" focusColor="#006a8b" labelFloat="true" layoutX="37.0" layoutY="165.0" prefHeight="38.0" prefWidth="400.0" promptText="Password">
+                  <JFXPasswordField fx:id="edtPassword" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="165.0" prefHeight="38.0" prefWidth="400.0" promptText="Password">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </JFXPasswordField>
-                  <JFXTextField fx:id="edtDatabaseUri" focusColor="#006a8b" labelFloat="true" layoutX="37.0" layoutY="236.0" prefHeight="38.0" prefWidth="400.0" promptText="Database URI" text="jdbc:mysql://localhost:3306">
+                  <JFXTextField fx:id="edtDatabaseUri" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="236.0" prefHeight="38.0" prefWidth="400.0" promptText="Database URI" text="jdbc:mysql://localhost:3306">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </JFXTextField>
-                  <JFXButton fx:id="btnLogin" buttonType="RAISED" defaultButton="true" layoutX="37.0" layoutY="318.0" onAction="#connectToDatabase" prefHeight="36.0" prefWidth="400.0" style="-fx-background-color: #006A8B; -fx-text-fill: #FFFFFF;" text="Login" textAlignment="CENTER">
+                  <JFXButton fx:id="btnLogin" buttonType="RAISED" defaultButton="true" layoutX="37.0" layoutY="318.0" onAction="#connectToDatabase" prefHeight="36.0" prefWidth="400.0" text="Login" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

@@ -9,8 +9,25 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
 }
 
+#btnLogin{
+    -fx-background-color: #2B237C;
+    -fx-text-fill: #FFFFFF;
+}
+
+#btnLogin:hover {
+  -fx-background-color: #0F054C;
+  -fx-cursor: hand;
+}
+
+#btnLogin:pressed {
+  -fx-background-color: #0F054C;
+}
+
 #root {
-    -fx-background-radius: 15 15 10 10;
+    -fx-background-image: url('/assets/bg.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 1280 768;
+    -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 

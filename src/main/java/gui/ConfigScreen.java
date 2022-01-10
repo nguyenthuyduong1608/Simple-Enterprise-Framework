@@ -3,6 +3,7 @@ package gui;
 import com.jfoenix.controls.*;
 import gradleGenerate.GradleGen;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -72,7 +73,7 @@ public class ConfigScreen implements Initializable {
             try {
                 String databaseName = databaseComboBox.getSelectionModel().getSelectedItem();
                 SqlDatabase sqlDatabase = sqlServer.connectToDatabase(databaseName);
-                String pathDest = destinationInput.getText() + databaseName;
+                String pathDest = destinationInput.getText() + '\\' + databaseName;
                 File fileDest = new File(pathDest);
                 sqlDatabase.generate(fileDest);
 
@@ -158,6 +159,13 @@ public class ConfigScreen implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         databaseComboBox.setItems(databaseList);
+        browseButton.styleProperty().bind(Bindings.when(browseButton.hoverProperty())
+                .then("-fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
+                .otherwise("-fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
+        generateButton.styleProperty().bind(Bindings.when(generateButton.hoverProperty())
+                .then("-fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
+                .otherwise("-fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
     }
 }

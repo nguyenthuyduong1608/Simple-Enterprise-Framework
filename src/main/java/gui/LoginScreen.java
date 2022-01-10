@@ -37,6 +37,7 @@ public class LoginScreen implements Initializable {
     @FXML
     private JFXButton btnLogin;
 
+
     public void connectToDatabase(ActionEvent event) {
         String user = edtUsername.getText();
         String pass = edtPassword.getText();
