@@ -5,14 +5,14 @@ import java.sql.*
 
 class SqlServer(val _user: String, val _password: String, val _baseUrl: String) {
     companion object {
-        const val className = "com.mysql.cj.jdbc.Driver"
+        const val _className = "com.mysql.cj.jdbc.Driver"
     }
 
     fun connectToServer(): List<String> {
         val databases: MutableList<String> = ArrayList()
 
         try {
-            Class.forName(className)
+            Class.forName(_className)
             val connection: Connection = DriverManager.getConnection(_baseUrl, _user, _password)
             val metadata: DatabaseMetaData = connection.metaData
             val resultSet: ResultSet = metadata.catalogs

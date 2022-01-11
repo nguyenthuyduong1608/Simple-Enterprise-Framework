@@ -87,7 +87,7 @@ public class ConfigScreen implements Initializable {
                 sqlDatabase.get_tableList().stream().map(Table::get_className).forEach(entityClasses::add);
 
                 PersistenceConfig persistenceConfig =
-                        new PersistenceConfig(entityClasses, sqlServer.get_user(), sqlServer.get_password(), SqlServer.className,
+                        new PersistenceConfig(entityClasses, sqlServer.get_user(), sqlServer.get_password(), SqlServer._className,
                                 sqlServer.get_baseUrl() + "/" + databaseName);
                 File metaInfFolder = new File(pathDest + "\\src\\main\\resources\\META-INF");
                 metaInfFolder.mkdirs();

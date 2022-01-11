@@ -3,14 +3,14 @@ package ui.tool;
 import entity.Users;
 
 public class UserManagement {
-    private static UserManagement instance = null;
+    private static UserManagement _instance = null;
     private UserManagement(){}
 
     public static synchronized UserManagement getInstance(){
-        if(instance == null){
-            instance =  new UserManagement();
+        if(_instance == null){
+            _instance =  new UserManagement();
         }
-        return instance;
+        return _instance;
     }
 
     private Users user;
