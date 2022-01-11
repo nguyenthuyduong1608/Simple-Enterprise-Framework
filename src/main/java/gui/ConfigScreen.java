@@ -13,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -34,27 +33,21 @@ import java.util.stream.Collectors;
 
 public class ConfigScreen implements Initializable {
     @FXML
-    private StackPane root;
+    private StackPane _root;
 
     @FXML
-    private AnchorPane pneCenter;
+    private JFXButton _generateButton;
 
     @FXML
-    private JFXButton generateButton;
+    private JFXComboBox<String> _databaseComboBox;
 
     @FXML
-    private JFXComboBox<String> databaseComboBox;
+    private JFXTextField _destinationInput;
 
     @FXML
-    private JFXTextField destinationInput;
+    private JFXButton _browseButton;
 
-    @FXML
-    private JFXButton browseButton;
-
-    @FXML
-    private JFXButton backButton;
-
-    private SqlServer sqlServer;
+    private SqlServer _sqlServer;
 
     @FXML
     void chooseFolder(ActionEvent event) {
@@ -62,23 +55,23 @@ public class ConfigScreen implements Initializable {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(stage);
         if (selectedDirectory != null) {
-            destinationInput.setText(selectedDirectory.getPath());
+            _destinationInput.setText(selectedDirectory.getPath());
         }
     }
 
     @FXML
     void generate(ActionEvent event) {
-        this.generateButton.setDisable(true);
-        this.generateButton.setGraphicTextGap(16);
+        this._generateButton.setDisable(true);
+        this._generateButton.setGraphicTextGap(16);
         JFXSpinner spinner = new JFXSpinner();
         spinner.setMaxWidth(20);
-        this.generateButton.setGraphic(spinner);
+        this._generateButton.setGraphic(spinner);
 
         new Thread(() -> {
             try {
-                String databaseName = databaseComboBox.getSelectionModel().getSelectedItem();
-                SqlDatabase sqlDatabase = sqlServer.connectToDatabase(databaseName);
-                String pathDest = destinationInput.getText() + '\\' + databaseName;
+                String databaseName = _databaseComboBox.getSelectionModel().getSelectedItem();
+                SqlDatabase sqlDatabase = _sqlServer.connectToDatabase(databaseName);
+                String pathDest = _destinationInput.getText() + '\\' + databaseName;
                 File fileDest = new File(pathDest);
                 sqlDatabase.generate(fileDest);
 
@@ -87,8 +80,8 @@ public class ConfigScreen implements Initializable {
                 sqlDatabase.get_tableList().stream().map(Table::get_className).forEach(entityClasses::add);
 
                 PersistenceConfig persistenceConfig =
-                        new PersistenceConfig(entityClasses, sqlServer.get_user(), sqlServer.get_password(), SqlServer._className,
-                                sqlServer.get_baseUrl() + "/" + databaseName);
+                        new PersistenceConfig(entityClasses, _sqlServer.get_user(), _sqlServer.get_password(), SqlServer._className,
+                                _sqlServer.get_baseUrl() + "/" + databaseName);
                 File metaInfFolder = new File(pathDest + "\\src\\main\\resources\\META-INF");
                 metaInfFolder.mkdirs();
                 persistenceConfig.generate(metaInfFolder);
@@ -153,12 +146,12 @@ public class ConfigScreen implements Initializable {
                             fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\viewmodel\\" + table.get_className() +
                                     "ViewModel.java"));
                 }
-                Platform.runLater(() -> SceneUtils.getInstance().showDialog(this.root, "Success", "Your project is generated successfully!"));
+                Platform.runLater(() -> SceneUtils.getInstance().showDialog(this._root, "Success", "Your project is generated successfully!"));
             } catch (Exception e) {
-                Platform.runLater(() -> SceneUtils.getInstance().showDialog(this.root, "Failed", e.getMessage()));
+                Platform.runLater(() -> SceneUtils.getInstance().showDialog(this._root, "Failed", e.getMessage()));
                 e.printStackTrace();
             } finally {
-                this.generateButton.setDisable(false);
+                this._generateButton.setDisable(false);
                 spinner.managedProperty().bind(spinner.visibleProperty());
                 spinner.setVisible(false);
             }
@@ -168,22 +161,22 @@ public class ConfigScreen implements Initializable {
     ObservableList<String> databaseList;
 
     public void setDatabaseList(List<String> databaseList) {
-        databaseComboBox.setItems(FXCollections.observableArrayList(databaseList));
+        _databaseComboBox.setItems(FXCollections.observableArrayList(databaseList));
     }
 
     public void setSqlServer(SqlServer sqlServer) {
-        this.sqlServer = sqlServer;
+        this._sqlServer = sqlServer;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        databaseComboBox.setItems(databaseList);
-        browseButton.styleProperty().bind(Bindings.when(browseButton.hoverProperty())
+        _databaseComboBox.setItems(databaseList);
+        _browseButton.styleProperty().bind(Bindings.when(_browseButton.hoverProperty())
                 .then("-fx-background-radius: 10px; -fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
                 .otherwise("-fx-background-radius: 10px; -fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
 
-        generateButton.styleProperty().bind(Bindings.when(generateButton.hoverProperty())
+        _generateButton.styleProperty().bind(Bindings.when(_generateButton.hoverProperty())
                 .then("-fx-background-radius: 10px; -fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
                 .otherwise("-fx-background-radius: 10px; -fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
     }
