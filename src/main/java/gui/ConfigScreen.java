@@ -184,12 +184,12 @@ public class ConfigScreen implements Initializable {
 
         databaseComboBox.setItems(databaseList);
         browseButton.styleProperty().bind(Bindings.when(browseButton.hoverProperty())
-                .then("-fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
-                .otherwise("-fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
+                .then("-fx-background-radius: 10px; -fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
+                .otherwise("-fx-background-radius: 10px; -fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
 
         generateButton.styleProperty().bind(Bindings.when(generateButton.hoverProperty())
-                .then("-fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
-                .otherwise("-fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
+                .then("-fx-background-radius: 10px; -fx-background-color: #0F054C; -fx-text-fill: #ffffff;")
+                .otherwise("-fx-background-radius: 10px; -fx-background-color: #2B237C; -fx-text-fill: #ffffff;"));
     }
 
     public void backToLogin(ActionEvent event) {

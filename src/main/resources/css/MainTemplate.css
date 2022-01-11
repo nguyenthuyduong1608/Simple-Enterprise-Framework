@@ -2,7 +2,7 @@
 #pneCenter {
     -fx-background-color: #ffffff;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
-    -fx-background-radius: 5;
+    -fx-background-radius: 30px;
 }
 
 #pneCenter:hover {
@@ -12,6 +12,7 @@
 #btnLogin{
     -fx-background-color: #2B237C;
     -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 10px;
 }
 
 #btnLogin:hover {
