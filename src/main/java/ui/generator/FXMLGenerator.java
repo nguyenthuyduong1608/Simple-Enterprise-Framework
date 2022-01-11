@@ -10,18 +10,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 public class FXMLGenerator implements Generatable {
     private String database;
     private String table;
     private List<String> listTable;
     private List<String> listField;
+    private Map<String, Boolean> isAutoGen;
 
-    public FXMLGenerator(String database, String table, List<String> listTable, List<String> listField) {
+    public FXMLGenerator(String database, String table, List<String> listTable, List<String> listField, Map<String, Boolean> isAutoGen) {
         this.database = database;
         this.table = table;
         this.listTable = listTable;
         this.listField = listField;
+        this.isAutoGen = isAutoGen;
     }
 
     @Override
@@ -42,13 +45,16 @@ public class FXMLGenerator implements Generatable {
         // Convert entity classes name to right format
         String strField = listField
                 .stream()
-                .map(field ->
-                                "<JFXTextField fx:id=\"edt_" + field + "\" focusColor=\"#006a8b\" labelFloat=\"true\" promptText=\"" + field + "\">" + "\n"
-                                                    +"<VBox.margin>" +"\n"
-                                                    +    "<Insets />" +"\n"
-                                                    +"</VBox.margin>" + "\n"
-                                                +"</JFXTextField>"
-                )
+                .map(field ->{
+                    if (!isAutoGen.get(field)) {
+                        return "<JFXTextField fx:id=\"edt_" + field + "\" focusColor=\"#006a8b\" labelFloat=\"true\" promptText=\"" + field + "\">" + "\n"
+                                +"<VBox.margin>" +"\n"
+                                +    "<Insets />" +"\n"
+                                +"</VBox.margin>" + "\n"
+                                +"</JFXTextField>";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
         String strListTable = listTable

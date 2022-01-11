@@ -123,24 +123,37 @@ public class ConfigScreen implements Initializable {
 
                 System.out.println(databaseName);
                 for (Table table : sqlDatabase.getTableList()) {
+                    Map<String, Boolean> columnAutoGen = new HashMap<>();
+                    table.getColumnList().forEach(col -> {
+                        if (col.isAutoIncrement()){
+                            columnAutoGen.put(col.fieldName, true);
+                        }
+                        else {
+                            columnAutoGen.put(col.fieldName, false);
+                        }
+                    });
                     new FXMLGenerator(databaseName, table.getClassName(), listTableName,
-                            table.getColumnList().stream().map(Column::getFieldName).collect(Collectors.toList()))
+                            table.getColumnList().stream().map(Column::getFieldName).collect(Collectors.toList()), columnAutoGen)
                             .generate(new File(fileDest.getAbsolutePath() + "\\src\\main\\resources\\fxml\\" +
                                     table.getClassName().toLowerCase() + "Scene.fxml"));
 
-                    Map<String, String> a = new LinkedHashMap<>();
-                    table.getColumnList().forEach((value) -> a.put(value.fieldName, value.className));
-
+                    Map<String, Boolean> columnAutoGens = new LinkedHashMap<>();
+                    Map<String, String> columnTypes = new LinkedHashMap<>();
+                    table.getColumnList().forEach((value) -> {
+                        columnTypes.put(value.fieldName, value.className);
+                        columnAutoGens.put(value.fieldName, value.isAutoIncrement());
+                    });
                     new SceneGenerator(
                             table.getClassName(),
                             listTableName,
-                            a)
+                            columnTypes,
+                            columnAutoGens)
                             .generate(new File(
                                     fileDest.getAbsoluteFile() + "\\src\\main\\java\\ui\\scene\\" + table.getClassName() +
                                             "Scene.java"));
 
                     new ViewModelGenerator(table.getClassName(), table.getColumnList().stream().map(Column::getFieldName)
-                            .collect(Collectors.toList())).generate(new File(
+                            .collect(Collectors.toList()), columnAutoGens).generate(new File(
                             fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\viewmodel\\" + table.getClassName() +
                                     "ViewModel.java"));
                 }

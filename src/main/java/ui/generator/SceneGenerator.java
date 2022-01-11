@@ -21,8 +21,9 @@ public class SceneGenerator implements Generatable {
     Map<String, String> columnMap;
     List<String> field;
     List<String> fieldClass;
+    private Map<String, Boolean> isAutoGenerate;
 
-    public SceneGenerator(String table, List<String> listTable, Map<String, String> column) {
+    public SceneGenerator(String table, List<String> listTable, Map<String, String> column, Map<String, Boolean> isAutoGenerate) {
         this.table = table;
         this.listTable = listTable;
         this.columnMap = column;
@@ -30,7 +31,7 @@ public class SceneGenerator implements Generatable {
         this.field.addAll(columnMap.keySet());
         this.fieldClass =  new ArrayList<String>();
         this.fieldClass.addAll(columnMap.values());
-
+        this.isAutoGenerate = isAutoGenerate;
     }
 
     @Override
@@ -83,37 +84,50 @@ public class SceneGenerator implements Generatable {
 
         String getField = field
                 .stream()
-                .map(field->
-                        "                model.get" + ToolUtils.convertProp(field) + "().toString(),\n"
-                )
+                .map(field->"                model.get" + ToolUtils.convertProp(field) + "().toString(),\n")
                 .reduce("", (a, b) -> a + b);
         getField = getField.substring(0, getField.length()-2);
 
         String annotationFXML = field
                 .stream()
-                .map(field->
-                        "@FXML\n" +
-                                "    JFXTextField edt_"+ field +";"
-                )
+                .map(field->{
+                    if (!isAutoGenerate.get(field)) {
+                        return "@FXML\n" +
+                                "    JFXTextField edt_"+ field +";";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
         String getFieldOfData = field
                 .stream()
-                .map(field-> "\t\t\tthis.edt_"+field+".setText(data.get(index).get"+ToolUtils.convertProp(field)+"());"
-                )
+                .map(field-> {
+                    if (!isAutoGenerate.get(field)) {
+                        return "\t\t\tthis.edt_"+field+".setText(data.get(index).get"+ToolUtils.convertProp(field)+"());";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
         String getFieldToCreateVM = field
                 .stream()
-                .map(field-> "\n\t\t\tthis.edt_"+field+".getText(),"
-                )
+                .map(field->{
+                    if (!isAutoGenerate.get(field)) {
+                        return "\n\t\t\tthis.edt_"+field+".getText(),";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
         getFieldToCreateVM = getFieldToCreateVM.substring(0,getFieldToCreateVM.length() - 1);
 
         String getFieldToConvertEntity = field
                 .stream()
-                .map(field-> "\t\tres.set"+ToolUtils.convertProp(field)+"(("+columnMap.get(field)+") new ConvertUtil().ConvertToObject(\""+columnMap.get(field)+"\", model.get"+ToolUtils.convertProp(field)+"()));\n"
-                )
+                .map(field-> {
+                    if (!this.isAutoGenerate.get(field)) {
+                        return "\t\tres.set"+ToolUtils.convertProp(field)+"(("+columnMap.get(field)+") new ConvertUtil().ConvertToObject(\""+columnMap.get(field)+"\", model.get"+ToolUtils.convertProp(field)+"()));\n";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
 

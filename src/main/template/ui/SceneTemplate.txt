@@ -89,12 +89,12 @@ public class %table%Scene extends BaseSceneTemplate implements Initializable {
                 %table%Dao dao = new %table%Dao();
                 dao.delete(list.get(table.getSelectionModel().getSelectedIndex()));
                 fetchData();
-                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Update database success");
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Delete row success");
 
                 clearFields();
                 this.rightPane.setDisable(true);
             } catch (Exception e){
-                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Add database success");
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Delete row failed");
                 e.printStackTrace();
             }
 
@@ -141,7 +141,7 @@ public class %table%Scene extends BaseSceneTemplate implements Initializable {
                 dao.delete(list.get(table.getSelectionModel().getSelectedIndex()));
                 dao.insert(convertFromViewModelToEntity(getViewModel()));
                 fetchData();
-                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Update database success");
+                SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Edit database success");
                 //dao.close();
             } catch (Exception e){
                 SceneUtils.getInstance().showDialog(this.rootPane, "Failed", "Edit database failed");
