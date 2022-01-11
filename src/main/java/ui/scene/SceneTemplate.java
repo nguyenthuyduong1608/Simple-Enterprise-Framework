@@ -2,7 +2,6 @@ package ui.scene;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,8 +23,8 @@ import ui.viewmodel.ViewModelTemplate;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ui.MainTemplate.LOGIN_SCENE_FXML;
-import static ui.MainTemplate.SCENE_FXML;
+import static ui.MainTemplate._LOGIN_SCENE_FXML;
+import static ui.MainTemplate._SCENE_FXML;
 
 public class SceneTemplate extends BaseSceneTemplate implements Initializable {
     @FXML
@@ -121,19 +120,19 @@ public class SceneTemplate extends BaseSceneTemplate implements Initializable {
     @FXML
     private void switchScene1() {
         MainTemplate.setCurrentTab(0);
-        SceneUtils.getInstance().switchScreen(this.rootPane, SCENE_FXML, 100);
+        SceneUtils.getInstance().switchScreen(this.rootPane, _SCENE_FXML, 100);
     }
 
     @FXML
     private void switchScene2() {
         MainTemplate.setCurrentTab(1);
-        SceneUtils.getInstance().switchScreen(this.rootPane, SCENE_FXML, 100);
+        SceneUtils.getInstance().switchScreen(this.rootPane, _SCENE_FXML, 100);
     }
 
     @FXML
     private void switchScene3() {
         MainTemplate.setCurrentTab(2);
-        SceneUtils.getInstance().switchScreen(this.rootPane, SCENE_FXML, 100);
+        SceneUtils.getInstance().switchScreen(this.rootPane, _SCENE_FXML, 100);
     }
 
     @FXML
@@ -192,6 +191,6 @@ public class SceneTemplate extends BaseSceneTemplate implements Initializable {
     }
 
     private void logOut(ActionEvent event) {
-        SceneUtils.getInstance().switchScreen(this.rootPane, LOGIN_SCENE_FXML, 100);
+        SceneUtils.getInstance().switchScreen(this.rootPane, _LOGIN_SCENE_FXML, 100);
     }
 }

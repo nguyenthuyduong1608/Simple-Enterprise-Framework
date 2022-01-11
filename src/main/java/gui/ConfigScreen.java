@@ -15,12 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import org.apache.commons.io.FileUtils;
 import orm.column.Column;
 import orm.SqlDatabase;
@@ -88,18 +84,18 @@ public class ConfigScreen implements Initializable {
 
                 List<String> entityClasses = new ArrayList<>();
 
-                sqlDatabase.getTableList().stream().map(Table::getClassName).forEach(entityClasses::add);
+                sqlDatabase.get_tableList().stream().map(Table::get_className).forEach(entityClasses::add);
 
                 PersistenceConfig persistenceConfig =
-                        new PersistenceConfig(entityClasses, sqlServer.getUser(), sqlServer.getPassword(), SqlServer.className,
-                                sqlServer.getBaseUrl() + "/" + databaseName);
+                        new PersistenceConfig(entityClasses, sqlServer.get_user(), sqlServer.get_password(), SqlServer.className,
+                                sqlServer.get_baseUrl() + "/" + databaseName);
                 File metaInfFolder = new File(pathDest + "\\src\\main\\resources\\META-INF");
                 metaInfFolder.mkdirs();
                 persistenceConfig.generate(metaInfFolder);
 
                 GradleGen gradleGen = new GradleGen(databaseName);
                 gradleGen.generate(fileDest);
-                sqlDatabase.tableList.remove(sqlDatabase.tableList.size() - 1);
+                sqlDatabase._tableList.remove(sqlDatabase._tableList.size() - 1);
 
                 // Generate UI
                 new File(fileDest.getAbsolutePath() + "\\src\\main\\java\\ui").mkdir();
@@ -108,7 +104,7 @@ public class ConfigScreen implements Initializable {
                 new File(fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\tool").mkdir();
                 new ResGenerator().generate(fileDest);
                 new ToolGenerator().generate(fileDest);
-                new MemberGenerator(sqlDatabase.tableList.get(0).getClassName().toLowerCase()).generate(fileDest);
+                new MemberGenerator(sqlDatabase._tableList.get(0).get_className().toLowerCase()).generate(fileDest);
 
                 File base = new File("src\\main\\template\\ui\\BaseSceneTemplate.java");
                 File targetBase = new File((fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\scene\\BaseSceneTemplate.java"));
@@ -116,45 +112,45 @@ public class ConfigScreen implements Initializable {
                 FileUtils.copyFile(base, targetBase);
 
                 List<String> listTableName =
-                        sqlDatabase.tableList.stream().map(Table::getClassName).collect(Collectors.toList());
+                        sqlDatabase._tableList.stream().map(Table::get_className).collect(Collectors.toList());
 
-                new UIGenerator(sqlDatabase.tableList.get(0).getClassName())
+                new UIGenerator(sqlDatabase._tableList.get(0).get_className())
                         .generate(new File(fileDest.getAbsoluteFile() + "\\src\\main\\java\\ui\\Main.java"));
 
                 System.out.println(databaseName);
-                for (Table table : sqlDatabase.getTableList()) {
+                for (Table table : sqlDatabase.get_tableList()) {
                     Map<String, Boolean> columnAutoGen = new HashMap<>();
-                    table.getColumnList().forEach(col -> {
-                        if (col.isAutoIncrement()){
-                            columnAutoGen.put(col.fieldName, true);
+                    table.get_columnList().forEach(col -> {
+                        if (col.get_isAutoIncrement()){
+                            columnAutoGen.put(col._fieldName, true);
                         }
                         else {
-                            columnAutoGen.put(col.fieldName, false);
+                            columnAutoGen.put(col._fieldName, false);
                         }
                     });
-                    new FXMLGenerator(databaseName, table.getClassName(), listTableName,
-                            table.getColumnList().stream().map(Column::getFieldName).collect(Collectors.toList()), columnAutoGen)
+                    new FXMLGenerator(databaseName, table.get_className(), listTableName,
+                            table.get_columnList().stream().map(Column::get_fieldName).collect(Collectors.toList()), columnAutoGen)
                             .generate(new File(fileDest.getAbsolutePath() + "\\src\\main\\resources\\fxml\\" +
-                                    table.getClassName().toLowerCase() + "Scene.fxml"));
+                                    table.get_className().toLowerCase() + "Scene.fxml"));
 
                     Map<String, Boolean> columnAutoGens = new LinkedHashMap<>();
                     Map<String, String> columnTypes = new LinkedHashMap<>();
-                    table.getColumnList().forEach((value) -> {
-                        columnTypes.put(value.fieldName, value.className);
-                        columnAutoGens.put(value.fieldName, value.isAutoIncrement());
+                    table.get_columnList().forEach((value) -> {
+                        columnTypes.put(value._fieldName, value._className);
+                        columnAutoGens.put(value._fieldName, value.get_isAutoIncrement());
                     });
                     new SceneGenerator(
-                            table.getClassName(),
+                            table.get_className(),
                             listTableName,
                             columnTypes,
                             columnAutoGens)
                             .generate(new File(
-                                    fileDest.getAbsoluteFile() + "\\src\\main\\java\\ui\\scene\\" + table.getClassName() +
+                                    fileDest.getAbsoluteFile() + "\\src\\main\\java\\ui\\scene\\" + table.get_className() +
                                             "Scene.java"));
 
-                    new ViewModelGenerator(table.getClassName(), table.getColumnList().stream().map(Column::getFieldName)
+                    new ViewModelGenerator(table.get_className(), table.get_columnList().stream().map(Column::get_fieldName)
                             .collect(Collectors.toList()), columnAutoGens).generate(new File(
-                            fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\viewmodel\\" + table.getClassName() +
+                            fileDest.getAbsolutePath() + "\\src\\main\\java\\ui\\viewmodel\\" + table.get_className() +
                                     "ViewModel.java"));
                 }
                 Platform.runLater(() -> SceneUtils.getInstance().showDialog(this.root, "Success", "Your project is generated successfully!"));

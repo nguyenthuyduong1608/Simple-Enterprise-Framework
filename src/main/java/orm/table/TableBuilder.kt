@@ -4,22 +4,22 @@ import orm.column.Column
 
 
 class TableBuilder {
-    val table = Table()
+    val _table = Table()
 
     fun setTableName(tableName: String): TableBuilder {
-        table.tableName = tableName
+        _table._tableName = tableName
         return this
     }
 
     fun setClassName(className: String): TableBuilder {
-        table.className = className
+        _table._className = className
         return this
     }
 
     fun addColumn(column: Column): TableBuilder {
-        table.columnList.add(column)
+        _table._columnList.add(column)
         return this
     }
 
-    fun build(): Table = table
+    fun build(): Table = _table
 }

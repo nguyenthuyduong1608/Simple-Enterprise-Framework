@@ -18,13 +18,13 @@ import javax.persistence.*
 import javax.persistence.Table
 
 class Table() : Generatable {
-    var tableName = String()
-    var className = String()
-    var columnList: MutableList<Column> = ArrayList()
+    var _tableName = String()
+    var _className = String()
+    var _columnList: MutableList<Column> = ArrayList()
 
     constructor(tableName: String, connection: Connection) : this() {
-        this.tableName = tableName
-        className = WordUtils.capitalize(tableName, '_', ' ')
+        this._tableName = tableName
+        _className = WordUtils.capitalize(tableName, '_', ' ')
             .replace("_", "")
             .replace("", "")
 
@@ -36,7 +36,7 @@ class Table() : Generatable {
 
         for (i in 1..columnCount) {
             val column = Column(resultSetMetaData, i)
-            columnList.add(column)
+            _columnList.add(column)
         }
     }
 
@@ -48,26 +48,26 @@ class Table() : Generatable {
 
     private fun generateDao(directory: File) {
         val typeSpecBuilder = TypeSpec
-            .classBuilder(className + "Dao")
+            .classBuilder(_className + "Dao")
             .addModifiers(Modifier.PUBLIC)
 
         typeSpecBuilder.superclass(
             ParameterizedTypeName.get(
                 ClassName.get("dao", "BaseDao"),
-                ClassName.get("entity", className),
+                ClassName.get("entity", _className),
                 TypeVariableName.get(getSimpleClassNamePrimaryKey())
             )
         )
 
         val returnType = ParameterizedTypeName.get(
             ClassName.get(Class::class.java),
-            TypeVariableName.get(className)
+            TypeVariableName.get(_className)
         )
         val getClazzMethod = MethodSpec.methodBuilder("getClazz")
             .addAnnotation(Override::class.java)
             .addModifiers(Modifier.PROTECTED)
             .returns(returnType)
-            .addStatement("return \$L.class", className)
+            .addStatement("return \$L.class", _className)
             .build()
 
         typeSpecBuilder.addMethod(getClazzMethod)
@@ -79,19 +79,19 @@ class Table() : Generatable {
     private fun generateEntity(directory: File) {
         val fieldSpecs: MutableList<FieldSpec> = ArrayList()
         val methodSpecs: MutableList<MethodSpec> = ArrayList()
-        columnList.forEach {
+        _columnList.forEach {
             fieldSpecs.add(it.toFieldSpec())
             methodSpecs.add(it.createGetterMethod())
-            if (!it.isAutoIncrement) {
+            if (!it._isAutoIncrement) {
                 methodSpecs.add(it.createSetterMethod())
             }
         }
 
-        val typeSpecBuilder = TypeSpec.classBuilder(className)
+        val typeSpecBuilder = TypeSpec.classBuilder(_className)
             .addModifiers(Modifier.PUBLIC).addSuperinterface(Serializable::class.java)
         typeSpecBuilder.addAnnotation(Entity::class.java)
         val tableAnnotation = AnnotationSpec.builder(Table::class.java)
-            .addMember("name", "\$S", tableName)
+            .addMember("name", "\$S", _tableName)
             .build()
 
         typeSpecBuilder.addAnnotation(tableAnnotation)
@@ -103,8 +103,8 @@ class Table() : Generatable {
     }
 
     private fun getSimpleClassNamePrimaryKey(): String {
-        columnList.forEach {
-            if (it.isPrimaryKey)
+        _columnList.forEach {
+            if (it._isPrimaryKey)
                 return it.getSimpleClassName()
         }
         return ""
@@ -112,7 +112,7 @@ class Table() : Generatable {
 
     fun addToDatabase(database: SqlDatabase): Boolean {
         val connection =
-            DriverManager.getConnection(database.jdbcUrl, database.sqlServer.user, database.sqlServer.password)
+            DriverManager.getConnection(database._jdbcUrl, database._sqlServer._user, database._sqlServer._password)
 
         val statement = connection.createStatement()
         return statement.execute(createTableSql())
@@ -120,10 +120,10 @@ class Table() : Generatable {
 
     private fun createTableSql(): String {
         val stringBuilder = StringBuilder()
-        stringBuilder.append("CREATE TABLE IF NOT EXISTS $tableName (")
-        for (i in 0 until columnList.size) {
-            stringBuilder.append(columnList[i].toSql())
-            if (i != columnList.size - 1)
+        stringBuilder.append("CREATE TABLE IF NOT EXISTS $_tableName (")
+        for (i in 0 until _columnList.size) {
+            stringBuilder.append(_columnList[i].toSql())
+            if (i != _columnList.size - 1)
                 stringBuilder.append(',')
         }
         stringBuilder.append(')')

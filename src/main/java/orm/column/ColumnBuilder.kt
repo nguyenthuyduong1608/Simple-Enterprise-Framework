@@ -1,39 +1,39 @@
 package orm.column
 
 class ColumnBuilder {
-    private val column = Column()
+    private val _column = Column()
 
     fun setClassName(className: String): ColumnBuilder {
-        column.className = className
+        _column._className = className
         return this
     }
 
     fun setColumnName(columnName: String): ColumnBuilder {
-        column.columnName = columnName
+        _column._columnName = columnName
         return this
     }
 
     fun setAutoIncrement(autoIncrement: Boolean): ColumnBuilder {
-        column.isAutoIncrement = autoIncrement
+        _column._isAutoIncrement = autoIncrement
         return this
     }
 
     fun setNullable(isNullable: Boolean): ColumnBuilder {
-        column.isNullable = isNullable
+        _column._isNullable = isNullable
         return this
     }
 
     fun setIsPrimaryKey(isPrimaryKey: Boolean): ColumnBuilder {
-        column.isPrimaryKey = isPrimaryKey
+        _column._isPrimaryKey = isPrimaryKey
         return this
     }
 
     fun setFieldName(fieldName: String): ColumnBuilder {
-        column.fieldName = fieldName
+        _column._fieldName = fieldName
         return this
     }
 
     fun build(): Column {
-        return column
+        return _column
     }
 }

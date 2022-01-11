@@ -3,7 +3,7 @@ package orm
 import java.sql.*
 
 
-class SqlServer(val user: String, val password: String, val baseUrl: String) {
+class SqlServer(val _user: String, val _password: String, val _baseUrl: String) {
     companion object {
         const val className = "com.mysql.cj.jdbc.Driver"
     }
@@ -13,7 +13,7 @@ class SqlServer(val user: String, val password: String, val baseUrl: String) {
 
         try {
             Class.forName(className)
-            val connection: Connection = DriverManager.getConnection(baseUrl, user, password)
+            val connection: Connection = DriverManager.getConnection(_baseUrl, _user, _password)
             val metadata: DatabaseMetaData = connection.metaData
             val resultSet: ResultSet = metadata.catalogs
             while (resultSet.next()) {
