@@ -25,7 +25,6 @@ public class GradleGen implements Generatable {
         try {
             FileUtils.copyDirectory(source, directory);
 
-
             //Change settings.gradle project name
             Path settingPath = Paths.get(directory.getPath(), "settings.gradle");
             StringBuilder builder = new StringBuilder("");

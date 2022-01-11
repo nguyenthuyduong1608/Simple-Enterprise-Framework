@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class LoginScreen implements Initializable {
     @FXML
-    private StackPane root;
+    private StackPane _root;
 
     @FXML
     private JFXTextField _edtUsername;
@@ -43,7 +43,7 @@ public class LoginScreen implements Initializable {
 
             if (databases.isEmpty()) {
                 Platform.runLater(() -> {
-                    Utils.setAlert(root, "Oops... Something wrong", "Can't connect to database");
+                    Utils.setAlert(_root, "Oops... Something wrong", "Can't connect to database");
                 });
             } else {
                 Platform.runLater(() -> {
