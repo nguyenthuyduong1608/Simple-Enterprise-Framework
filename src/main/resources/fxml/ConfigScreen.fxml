@@ -20,7 +20,7 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);">
             <children>
                 <AnchorPane fx:id="pneCenter" layoutX="700.0" layoutY="202.0" prefHeight="400.0" prefWidth="480.0"
-                            style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-background-color: #ffffff; -fx-background-radius: 10;">
+                            style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-background-color: #ffffff; -fx-background-radius: 30;">
                     <children>
                         <Label layoutX="161.0" layoutY="35.0" text="Configuration" textAlignment="CENTER"
                                textFill="#2B237C">
@@ -36,7 +36,7 @@
                             </font>
                         </JFXButton>
                         <JFXButton fx:id="backButton" buttonType="RAISED" defaultButton="true" layoutX="40.0"
-                                   layoutY="310.0" onAction="#backToLogin" prefHeight="36.0" prefWidth="400.0" style="-fx-border-color: #2B237C; -fx-border-radius: 3; -fx-background-color: #FFFFFF; -fx-text-fill: #2B237C;" text="Log out" textAlignment="CENTER">
+                                   layoutY="310.0" onAction="#backToLogin" prefHeight="36.0" prefWidth="400.0" style="-fx-border-color: #2B237C; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #FFFFFF; -fx-text-fill: #2B237C;" text="Log out" textAlignment="CENTER">
                             <font>
                                 <Font name="System Bold" size="14.0"/>
                             </font>
@@ -53,7 +53,7 @@
                                 </JFXTextField>
                                 <JFXButton fx:id="browseButton" buttonType="RAISED" onAction="#chooseFolder"
                                            prefHeight="38.0" prefWidth="88.0"
-                                           text="Select..."/>
+                                           text="Browse..."/>
                             </children>
                         </HBox>
                     </children>
