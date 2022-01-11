@@ -17,7 +17,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
         Parent root = loader.load();
-        LoginScreen login = loader.getController();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/css/MainTemplate.css").toExternalForm());
         primaryStage.setTitle("CRUD Generation");
