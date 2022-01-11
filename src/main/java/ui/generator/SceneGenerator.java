@@ -90,16 +90,23 @@ public class SceneGenerator implements Generatable {
 
         String annotationFXML = field
                 .stream()
-                .map(field->
-                        "@FXML\n" +
-                                "    JFXTextField edt_"+ field +";"
-                )
+                .map(field->{
+                    if (!isAutoGenerate.get(field)) {
+                        return "@FXML\n" +
+                                "    JFXTextField edt_"+ field +";";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
         String getFieldOfData = field
                 .stream()
-                .map(field-> "\t\t\tthis.edt_"+field+".setText(data.get(index).get"+ToolUtils.convertProp(field)+"());"
-                )
+                .map(field-> {
+                    if (!isAutoGenerate.get(field)) {
+                        return "\t\t\tthis.edt_"+field+".setText(data.get(index).get"+ToolUtils.convertProp(field)+"());";
+                    }
+                    return "";
+                })
                 .reduce("", (a, b) -> a + b);
 
         String getFieldToCreateVM = field

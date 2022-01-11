@@ -123,8 +123,17 @@ public class ConfigScreen implements Initializable {
 
                 System.out.println(databaseName);
                 for (Table table : sqlDatabase.getTableList()) {
+                    Map<String, Boolean> columnAutoGen = new HashMap<>();
+                    table.getColumnList().forEach(col -> {
+                        if (col.isAutoIncrement()){
+                            columnAutoGen.put(col.fieldName, true);
+                        }
+                        else {
+                            columnAutoGen.put(col.fieldName, false);
+                        }
+                    });
                     new FXMLGenerator(databaseName, table.getClassName(), listTableName,
-                            table.getColumnList().stream().map(Column::getFieldName).collect(Collectors.toList()))
+                            table.getColumnList().stream().map(Column::getFieldName).collect(Collectors.toList()), columnAutoGen)
                             .generate(new File(fileDest.getAbsolutePath() + "\\src\\main\\resources\\fxml\\" +
                                     table.getClassName().toLowerCase() + "Scene.fxml"));
 
