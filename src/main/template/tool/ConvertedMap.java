@@ -3,17 +3,17 @@ package ui.tool;
 import java.util.*;
 
 public class ConvertedMap{
-    private HashMap<String, IConverted> list;
+    private HashMap<String, IConverted> _list;
 
     ConvertedMap(){
-        list = new HashMap<>();
-        list.put("java.lang.Integer", new IntegerConverted());
-        list.put("java.lang.String", new StringConverted());
-        list.put("java.lang.Boolean", new BooleanConverted());
-        list.put("java.lang.Float", new FloatConverted());
+        _list = new HashMap<>();
+        _list.put("java.lang.Integer", new IntegerConverted());
+        _list.put("java.lang.String", new StringConverted());
+        _list.put("java.lang.Boolean", new BooleanConverted());
+        _list.put("java.lang.Float", new FloatConverted());
     }
 
     public HashMap<String, IConverted> getList() {
-        return list;
+        return _list;
     }
 }

@@ -15,31 +15,31 @@ import javax.persistence.Id
 
 
 class Column() {
-    lateinit var className: String
-    lateinit var columnName: String
-    var isAutoIncrement: Boolean = false
-    var isNullable: Boolean = false
-    var isPrimaryKey: Boolean = false
-    lateinit var fieldName: String
+    lateinit var _className: String
+    lateinit var _columnName: String
+    var _isAutoIncrement: Boolean = false
+    var _isNullable: Boolean = false
+    var _isPrimaryKey: Boolean = false
+    lateinit var _fieldName: String
 
     constructor(resultSetMetaData: ResultSetMetaData, column: Int) : this() {
-        className = resultSetMetaData.getColumnClassName(column)
-        columnName = resultSetMetaData.getColumnName(column)
-        isAutoIncrement = resultSetMetaData.isAutoIncrement(column)
-        isNullable = resultSetMetaData.isNullable(column) != 0
-        isPrimaryKey = resultSetMetaData.fields[column - 1].isPrimaryKey
-        fieldName = Character.toLowerCase(columnName[0]) + columnName.substring(1)
-        fieldName = fieldName.replace("_", "")
-        fieldName = fieldName.replace(" ", "")
+        _className = resultSetMetaData.getColumnClassName(column)
+        _columnName = resultSetMetaData.getColumnName(column)
+        _isAutoIncrement = resultSetMetaData.isAutoIncrement(column)
+        _isNullable = resultSetMetaData.isNullable(column) != 0
+        _isPrimaryKey = resultSetMetaData.fields[column - 1].isPrimaryKey
+        _fieldName = Character.toLowerCase(_columnName[0]) + _columnName.substring(1)
+        _fieldName = _fieldName.replace("_", "")
+        _fieldName = _fieldName.replace(" ", "")
     }
 
     fun getSimpleClassName(): String {
-        val tokens = className.split(".").toList()
+        val tokens = _className.split(".").toList()
         return tokens.last()
     }
 
     private fun getPackageName(): String {
-        val tokens = className.split(".").toList()
+        val tokens = _className.split(".").toList()
         var packageName = ""
         for (i in 0..tokens.size - 2) {
             if (i != 0)
@@ -51,24 +51,24 @@ class Column() {
 
     fun toFieldSpec(): FieldSpec {
         val typeName = ClassName.get(getPackageName(), getSimpleClassName())
-        val fieldSpecBuilder = FieldSpec.builder(typeName, fieldName, Modifier.PRIVATE)
-        if (isPrimaryKey)
+        val fieldSpecBuilder = FieldSpec.builder(typeName, _fieldName, Modifier.PRIVATE)
+        if (_isPrimaryKey)
             fieldSpecBuilder.addAnnotation(Id::class.java)
 
         val annotationColumnName = AnnotationSpec.builder(Column::class.java)
-            .addMember("name", "\$S", columnName)
+            .addMember("name", "\$S", _columnName)
             .build()
 
-        if (!isNullable)
+        if (!_isNullable)
             fieldSpecBuilder.addAnnotation(AnnotationSpec.builder(NotNull::class.java).build())
 
-        if (isAutoIncrement && !isPrimaryKey)
+        if (_isAutoIncrement && !_isPrimaryKey)
             fieldSpecBuilder.addAnnotation(
                 AnnotationSpec.builder(GeneratedValue::class.java)
                     .addMember("strategy", "\$T.\$L", GenerationType::class.java, GenerationType.AUTO.name).build()
             )
 
-        if (isAutoIncrement && isPrimaryKey)
+        if (_isAutoIncrement && _isPrimaryKey)
             fieldSpecBuilder.addAnnotation(
                 AnnotationSpec.builder(GeneratedValue::class.java)
                     .addMember("strategy", "\$T.\$L", GenerationType::class.java, GenerationType.IDENTITY.name).build()
@@ -81,35 +81,35 @@ class Column() {
 
     fun createGetterMethod(): MethodSpec {
         val typeName = ClassName.get(getPackageName(), getSimpleClassName())
-        val methodName = "get" + Character.toUpperCase(fieldName[0]) +
-                fieldName.substring(1)
+        val methodName = "get" + Character.toUpperCase(_fieldName[0]) +
+                _fieldName.substring(1)
         return MethodSpec.methodBuilder(methodName)
             .addModifiers(Modifier.PUBLIC)
             .returns(typeName)
-            .addStatement("return $fieldName")
+            .addStatement("return $_fieldName")
             .build()
     }
 
     fun createSetterMethod(): MethodSpec {
         val typeName = ClassName.get(getPackageName(), getSimpleClassName())
-        val methodName = "set" + Character.toUpperCase(fieldName[0]) +
-                fieldName.substring(1)
+        val methodName = "set" + Character.toUpperCase(_fieldName[0]) +
+                _fieldName.substring(1)
         return MethodSpec.methodBuilder(methodName)
             .addModifiers(Modifier.PUBLIC)
-            .addParameter(typeName, fieldName)
-            .addStatement("this.\$N = \$N", fieldName, fieldName)
+            .addParameter(typeName, _fieldName)
+            .addStatement("this.\$N = \$N", _fieldName, _fieldName)
             .build()
     }
 
     fun toSql(): String {
         val stringBuilder = StringBuilder()
-        stringBuilder.append(columnName)
-        stringBuilder.append(" ${TypeMapping.javaTypeToSqlType(className)}")
-        if (isAutoIncrement)
+        stringBuilder.append(_columnName)
+        stringBuilder.append(" ${TypeMapping.javaTypeToSqlType(_className)}")
+        if (_isAutoIncrement)
             stringBuilder.append(" AUTO_INCREMENT")
-        if (isPrimaryKey)
+        if (_isPrimaryKey)
             stringBuilder.append(" PRIMARY KEY")
-        if (!isNullable)
+        if (!_isNullable)
             stringBuilder.append(" NOT NULL")
         return stringBuilder.toString()
     }

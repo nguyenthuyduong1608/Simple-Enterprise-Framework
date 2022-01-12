@@ -13,10 +13,10 @@ import java.nio.file.Paths;
 
 public class GradleGen implements Generatable {
 
-    private String projectName;
+    private String _projectName;
 
     public GradleGen (String projectName){
-        this.projectName = projectName;
+        this._projectName = projectName;
     }
 
     @Override
@@ -24,7 +24,6 @@ public class GradleGen implements Generatable {
         File source = new File("src\\main\\resources\\template\\templateGradle");
         try {
             FileUtils.copyDirectory(source, directory);
-
 
             //Change settings.gradle project name
             Path settingPath = Paths.get(directory.getPath(), "settings.gradle");
@@ -37,7 +36,7 @@ public class GradleGen implements Generatable {
                 e.printStackTrace();
             }
             String settingFinal = builder.toString();
-            settingFinal = StringUtils.replace(settingFinal, "%ProjectName%", projectName);
+            settingFinal = StringUtils.replace(settingFinal, "%ProjectName%", _projectName);
             try {
                 FileWriter myWriter = new FileWriter(directory + "\\settings.gradle");
                 myWriter.write(settingFinal);

@@ -8,9 +8,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginScreen">
+<StackPane fx:id="_root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginScreen">
    <children>
-      <AnchorPane prefHeight="768.0" prefWidth="1280.0">
+      <AnchorPane prefHeight="768.0" prefWidth="1280.0" style=" -fx-background-image: url('/assets/bg.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 1280 768;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);">
          <children>
             <AnchorPane fx:id="pneCenter" layoutX="700.0" layoutY="173.0" prefHeight="423.0" prefWidth="480.0">
                <children>
@@ -19,17 +23,17 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="edtUsername" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="95.0" prefHeight="38.0" prefWidth="400.0" promptText="Username">
+                  <JFXTextField fx:id="_edtUsername" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="95.0" prefHeight="38.0" prefWidth="400.0" promptText="Username">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </JFXTextField>
-                  <JFXPasswordField fx:id="edtPassword" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="165.0" prefHeight="38.0" prefWidth="400.0" promptText="Password">
+                  <JFXPasswordField fx:id="_edtPassword" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="165.0" prefHeight="38.0" prefWidth="400.0" promptText="Password">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </JFXPasswordField>
-                  <JFXTextField fx:id="edtDatabaseUri" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="236.0" prefHeight="38.0" prefWidth="400.0" promptText="Database URI" text="localhost:3306">
+                  <JFXTextField fx:id="_edtDatabaseUri" focusColor="#2B237C" labelFloat="true" layoutX="37.0" layoutY="236.0" prefHeight="38.0" prefWidth="400.0" promptText="Database URI" text="localhost:3306">
                      <font>
                         <Font size="14.0" />
                      </font>

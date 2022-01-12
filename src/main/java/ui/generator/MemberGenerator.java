@@ -12,10 +12,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MemberGenerator implements Generatable {
-    String demo;
+    String _demo;
 
     public MemberGenerator(String demo) {
-        this.demo = demo;
+        this._demo = demo;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MemberGenerator implements Generatable {
 
         String finalPersistenceContent = builder.toString();
 
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%demo%", demo);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%demo%", _demo);
 
 
         try {

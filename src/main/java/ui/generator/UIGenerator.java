@@ -1,7 +1,6 @@
 package ui.generator;
 
 import generator.Generatable;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -12,10 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class UIGenerator implements Generatable {
-    String demoByFirstTable;
+    String _demoByFirstTable;
 
     public UIGenerator(String demoByFirstTable) {
-        this.demoByFirstTable = demoByFirstTable;
+        this._demoByFirstTable = demoByFirstTable;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class UIGenerator implements Generatable {
 
         String finalPersistenceContent = builder.toString();
 
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%demo%", demoByFirstTable.toLowerCase());
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%demo%", _demoByFirstTable.toLowerCase());
 
 
         try {

@@ -10,25 +10,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PersistenceConfig implements Generatable {
-    private List<String> entityClasses;
-    private String user;
-    private String passWord;
-    private String jdbcDriver;
-    private String url;
+    private List<String> _entityClasses;
+    private String _user;
+    private String _passWord;
+    private String _jdbcDriver;
+    private String _url;
 
     public PersistenceConfig() {
 
     }
 
     public PersistenceConfig(List<String> entityClasses, String user, String passWord, String jdbcDriver, String url) {
-        this.entityClasses = entityClasses;
-        this.user = user;
-        this.passWord = passWord;
-        this.jdbcDriver = jdbcDriver;
-        this.url = url;
+        this._entityClasses = entityClasses;
+        this._user = user;
+        this._passWord = passWord;
+        this._jdbcDriver = jdbcDriver;
+        this._url = url;
     }
 
     @Override
@@ -46,16 +45,16 @@ public class PersistenceConfig implements Generatable {
         }
 
         // Convert entity classes name to right format
-        String entities = entityClasses.stream().map(classEntity -> "<class>entity." + classEntity + "</class>\n")
+        String entities = _entityClasses.stream().map(classEntity -> "<class>entity." + classEntity + "</class>\n")
                                        .reduce("", (a, b) -> a + b);
 
         String finalPersistenceContent = builder.toString();
 
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%entity%", entities);
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%jdbcDriver%", jdbcDriver);
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%user%", user);
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%passWord%", passWord);
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%url%", url);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%jdbcDriver%", _jdbcDriver);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%user%", _user);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%passWord%", _passWord);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%url%", _url);
 
         try {
             FileWriter myWriter = new FileWriter(directory + "\\persistence.xml");
@@ -67,34 +66,34 @@ public class PersistenceConfig implements Generatable {
     }
 
     public List<String> getEntityClasses() {
-        return entityClasses;
+        return _entityClasses;
     }
 
     public void setEntityClasses(List<String> entityClasses) {
-        this.entityClasses = entityClasses;
+        this._entityClasses = entityClasses;
     }
 
     public String getUser() {
-        return user;
+        return _user;
     }
 
     public void setUser(String user) {
-        this.user = user;
+        this._user = user;
     }
 
     public String getPassWord() {
-        return passWord;
+        return _passWord;
     }
 
     public void setPassWord(String passWord) {
-        this.passWord = passWord;
+        this._passWord = passWord;
     }
 
     public String getJdbcDriver() {
-        return jdbcDriver;
+        return _jdbcDriver;
     }
 
     public void setJdbcDriver(String jdbcDriver) {
-        this.jdbcDriver = jdbcDriver;
+        this._jdbcDriver = jdbcDriver;
     }
 }

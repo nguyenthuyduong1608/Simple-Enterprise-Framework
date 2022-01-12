@@ -21,15 +21,15 @@ import java.util.Optional;
 
 public class SceneUtils  {
     // Singleton pattern
-    private static SceneUtils instance;
+    private static SceneUtils _instance;
 
     private SceneUtils() {}
 
     public static synchronized SceneUtils getInstance() {
-        if (instance == null) {
-            instance = new SceneUtils();
+        if (_instance == null) {
+            _instance = new SceneUtils();
         }
-        return instance;
+        return _instance;
     }
 
     public boolean showConfirm(Stage stage, String title, String message) {

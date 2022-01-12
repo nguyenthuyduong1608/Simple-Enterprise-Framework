@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ViewModelGenerator implements Generatable {
-    String table;
-    List<String> listField;
-    private Map<String, Boolean> isAutoGenerate;
+    String _table;
+    List<String> _listField;
+    private Map<String, Boolean> _isAutoGenerate;
     public ViewModelGenerator(String table, List<String> field, Map<String, Boolean> isAutoGenerate) {
-        this.table = table;
-        this.listField = field;
-        this.isAutoGenerate = isAutoGenerate;
+        this._table = table;
+        this._listField = field;
+        this._isAutoGenerate = isAutoGenerate;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class ViewModelGenerator implements Generatable {
         }
 
 
-        String strField = listField
+        String strField = _listField
                 .stream()
                 .map(field -> "private SimpleStringProperty "+field+" = new SimpleStringProperty();\n\t")
                 .reduce("", (a, b) -> a + b);
 
-        String support = listField
+        String support = _listField
                 .stream()
                 .map(field ->{
                     String res = "public String get"+ ToolUtils.convertProp(field)+"() {\n" +
@@ -53,7 +53,7 @@ public class ViewModelGenerator implements Generatable {
                             "    public SimpleStringProperty "+ToolUtils.convertProp(field)+"Property() {\n" +
                             "        return "+field+";\n" +
                             "    }\n";
-                    if (!isAutoGenerate.get(field)) {
+                    if (!_isAutoGenerate.get(field)) {
                         res = res +
                                 "    public void set"+ToolUtils.convertProp(field)+"(String field1) {\n" +
                                 "        this."+field+".set(field1);\n" +
@@ -63,21 +63,21 @@ public class ViewModelGenerator implements Generatable {
                 })
                 .reduce("", (a, b) -> a + b);
 
-        String strConstructorBegin = "public "+table+"ViewModel";
-        String strConstructorParams = listField
+        String strConstructorBegin = "public "+ _table +"ViewModel";
+        String strConstructorParams = _listField
                 .stream()
                 .map(field ->{
-                    if (!isAutoGenerate.get(field)) {
+                    if (!_isAutoGenerate.get(field)) {
                         return "String " + field +", ";
                     }
                     return "";
                 })
                 .reduce("", (a, b) -> a + b);
         strConstructorParams = strConstructorParams.substring(0, strConstructorParams.length() - 2);
-        String strConstructorSet = listField
+        String strConstructorSet = _listField
                 .stream()
                 .map(field ->{
-                    if (!isAutoGenerate.get(field)) {
+                    if (!_isAutoGenerate.get(field)) {
                         return "       this."+field+".set("+field+");\n";
                     }
                     return "";
@@ -85,8 +85,8 @@ public class ViewModelGenerator implements Generatable {
                 .reduce("", (a, b) -> a + b);
 
         AtomicReference<Boolean> isNoFieldAutoGen = new AtomicReference<>(true);
-        listField.forEach(field -> {
-            if (isAutoGenerate.get(field)) {
+        _listField.forEach(field -> {
+            if (_isAutoGenerate.get(field)) {
                 isNoFieldAutoGen.set(false);
                 return;
             }
@@ -97,12 +97,12 @@ public class ViewModelGenerator implements Generatable {
 
         String strConstructorLong = "";
         if (!isNoFieldAutoGen.get()) {
-            strConstructorParams = listField
+            strConstructorParams = _listField
                     .stream()
                     .map(field ->"String " + field +", ")
                     .reduce("", (a, b) -> a + b);
             strConstructorParams = strConstructorParams.substring(0, strConstructorParams.length() - 2);
-            strConstructorSet = listField
+            strConstructorSet = _listField
                     .stream()
                     .map(field -> "       this."+field+".set("+field+");\n")
                     .reduce("", (a, b) -> a + b);
@@ -118,7 +118,7 @@ public class ViewModelGenerator implements Generatable {
 
         String finalPersistenceContent = builder.toString();
 
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%table%", table);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%table%", _table);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%support%", support);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%constructor%", strConstructor);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%field%", strField);

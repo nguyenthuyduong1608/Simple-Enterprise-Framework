@@ -11,8 +11,8 @@ import javafx.scene.layout.StackPane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ui.MainTemplate.REGISTER_SCENE_FXML;
-import static ui.MainTemplate.SCENE_FXML;
+import static ui.MainTemplate._REGISTER_SCENE_FXML;
+import static ui.MainTemplate._SCENE_FXML;
 
 
 public class LoginSceneTemplate extends BaseSceneTemplate implements Initializable {
@@ -29,12 +29,12 @@ public class LoginSceneTemplate extends BaseSceneTemplate implements Initializab
 
     @FXML
     private void login() {
-        SceneUtils.getInstance().switchScreen(this.rootPane, SCENE_FXML, 100);
+        SceneUtils.getInstance().switchScreen(this.rootPane, _SCENE_FXML, 100);
     }
 
     @FXML
     private void register() {
-        SceneUtils.getInstance().switchScreen(this.rootPane, REGISTER_SCENE_FXML, 100);
+        SceneUtils.getInstance().switchScreen(this.rootPane, _REGISTER_SCENE_FXML, 100);
     }
 
     @Override

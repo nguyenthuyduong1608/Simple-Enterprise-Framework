@@ -13,25 +13,25 @@ import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
 import javax.persistence.Persistence
 
-class SqlDatabase(val sqlServer: SqlServer, private val databaseName: String) : Generatable {
-    lateinit var tableList: MutableList<Table>
-    val jdbcUrl = "${sqlServer.baseUrl}/$databaseName"
+class SqlDatabase(val _sqlServer: SqlServer, private val _databaseName: String) : Generatable {
+    lateinit var _tableList: MutableList<Table>
+    val _jdbcUrl = "${_sqlServer._baseUrl}/$_databaseName"
 
     init {
         getTableListFromDb()
     }
 
     private fun getTableListFromDb() {
-        tableList = ArrayList()
+        _tableList = ArrayList()
         val connection =
-            DriverManager.getConnection(jdbcUrl, sqlServer.user, sqlServer.password)
+            DriverManager.getConnection(_jdbcUrl, _sqlServer._user, _sqlServer._password)
 
         val metadata = connection.metaData
         val resultSet = metadata.getTables(connection.catalog, null, "%", null)
         while (resultSet.next()) {
             val tableName = resultSet.getString("TABLE_NAME")
             val table = Table(tableName, connection)
-            tableList.add(table)
+            _tableList.add(table)
         }
     }
 
@@ -41,7 +41,7 @@ class SqlDatabase(val sqlServer: SqlServer, private val databaseName: String) : 
         getTableListFromDb()
 
         val sourceFolder = File(rootProject.absolutePath + "\\src\\main\\java")
-        for (table in tableList)
+        for (table in _tableList)
             table.generate(sourceFolder)
 
         generateBaseDao(sourceFolder)

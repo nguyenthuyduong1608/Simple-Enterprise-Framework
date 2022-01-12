@@ -10,38 +10,32 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import orm.SqlServer;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LoginScreen implements Initializable {
     @FXML
-    private StackPane root;
+    private StackPane _root;
 
     @FXML
-    private JFXTextField edtUsername;
+    private JFXTextField _edtUsername;
 
     @FXML
-    private JFXPasswordField edtPassword;
+    private JFXPasswordField _edtPassword;
 
     @FXML
-    private JFXTextField edtDatabaseUri;
-
-    @FXML
-    private JFXButton btnLogin;
-
+    private JFXTextField _edtDatabaseUri;
 
     public void connectToDatabase(ActionEvent event) {
-        String user = edtUsername.getText();
-        String pass = edtPassword.getText();
-        String baseUrl = "jdbc:mysql://" + edtDatabaseUri.getText();
+        String user = _edtUsername.getText();
+        String pass = _edtPassword.getText();
+        String baseUrl = "jdbc:mysql://" + _edtDatabaseUri.getText();
 
         new Thread(() -> {
             SqlServer sqlServer = new SqlServer(user, pass, baseUrl);
@@ -49,7 +43,7 @@ public class LoginScreen implements Initializable {
 
             if (databases.isEmpty()) {
                 Platform.runLater(() -> {
-                    Utils.setAlert(root, "Oops... Something wrong", "Can't connect to database");
+                    Utils.setAlert(_root, "Oops... Something wrong", "Can't connect to database");
                 });
             } else {
                 Platform.runLater(() -> {

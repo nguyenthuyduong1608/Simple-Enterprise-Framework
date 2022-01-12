@@ -1,7 +1,6 @@
 package ui.generator;
 
 import generator.Generatable;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import ui.ToolUtils;
 
@@ -16,22 +15,22 @@ import java.util.List;
 import java.util.Map;
 
 public class SceneGenerator implements Generatable {
-    String table;
-    List<String> listTable;
-    Map<String, String> columnMap;
-    List<String> field;
-    List<String> fieldClass;
-    private Map<String, Boolean> isAutoGenerate;
+    String _table;
+    List<String> _listTable;
+    Map<String, String> _columnMap;
+    List<String> _field;
+    List<String> _fieldClass;
+    private Map<String, Boolean> _isAutoGenerate;
 
     public SceneGenerator(String table, List<String> listTable, Map<String, String> column, Map<String, Boolean> isAutoGenerate) {
-        this.table = table;
-        this.listTable = listTable;
-        this.columnMap = column;
-        this.field = new ArrayList<String>();
-        this.field.addAll(columnMap.keySet());
-        this.fieldClass =  new ArrayList<String>();
-        this.fieldClass.addAll(columnMap.values());
-        this.isAutoGenerate = isAutoGenerate;
+        this._table = table;
+        this._listTable = listTable;
+        this._columnMap = column;
+        this._field = new ArrayList<String>();
+        this._field.addAll(_columnMap.keySet());
+        this._fieldClass =  new ArrayList<String>();
+        this._fieldClass.addAll(_columnMap.values());
+        this._isAutoGenerate = isAutoGenerate;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class SceneGenerator implements Generatable {
         }
 
         final int[] iCount = {-1};
-        String switchFunction = listTable
+        String switchFunction = _listTable
                 .stream()
                 .map(table ->{
                             iCount[0]++;
@@ -63,35 +62,35 @@ public class SceneGenerator implements Generatable {
                 )
                 .reduce("", (a, b) -> a + b);
 
-        String column = field
+        String column = _field
                 .stream()
                 .map(field ->
-                        " TreeTableColumn<"+table+"ViewModel, String> col_"+field+" = new JFXTreeTableColumn<>(\""+ ToolUtils.convertProp(field)+"\");\n" +
+                        " TreeTableColumn<"+ _table +"ViewModel, String> col_"+field+" = new JFXTreeTableColumn<>(\""+ ToolUtils.convertProp(field)+"\");\n" +
                                 "        col_"+field+".setSortable(false);" +
                                 "        col_"+field+".setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue().get"+ToolUtils.convertProp(field)+"()));\n\n\t\t"
                 )
                 .reduce("", (a, b) -> a + b);
 
-        String addColumn = field
+        String addColumn = _field
                 .stream()
                 .map(field->
                         "col_" + field + ", "
                         )
                 .reduce("", (a, b) -> a + b);
-        if (field.size() > 0){
+        if (_field.size() > 0){
             addColumn = addColumn.substring(0, addColumn.length() - 2);
         }
 
-        String getField = field
+        String getField = _field
                 .stream()
                 .map(field->"                model.get" + ToolUtils.convertProp(field) + "().toString(),\n")
                 .reduce("", (a, b) -> a + b);
         getField = getField.substring(0, getField.length()-2);
 
-        String annotationFXML = field
+        String annotationFXML = _field
                 .stream()
                 .map(field->{
-                    if (!isAutoGenerate.get(field)) {
+                    if (!_isAutoGenerate.get(field)) {
                         return "@FXML\n" +
                                 "    JFXTextField edt_"+ field +";";
                     }
@@ -99,20 +98,20 @@ public class SceneGenerator implements Generatable {
                 })
                 .reduce("", (a, b) -> a + b);
 
-        String getFieldOfData = field
+        String getFieldOfData = _field
                 .stream()
                 .map(field-> {
-                    if (!isAutoGenerate.get(field)) {
+                    if (!_isAutoGenerate.get(field)) {
                         return "\t\t\tthis.edt_"+field+".setText(data.get(index).get"+ToolUtils.convertProp(field)+"());";
                     }
                     return "";
                 })
                 .reduce("", (a, b) -> a + b);
 
-        String getFieldToCreateVM = field
+        String getFieldToCreateVM = _field
                 .stream()
                 .map(field->{
-                    if (!isAutoGenerate.get(field)) {
+                    if (!_isAutoGenerate.get(field)) {
                         return "\n\t\t\tthis.edt_"+field+".getText(),";
                     }
                     return "";
@@ -120,11 +119,11 @@ public class SceneGenerator implements Generatable {
                 .reduce("", (a, b) -> a + b);
         getFieldToCreateVM = getFieldToCreateVM.substring(0,getFieldToCreateVM.length() - 1);
 
-        String getFieldToConvertEntity = field
+        String getFieldToConvertEntity = _field
                 .stream()
                 .map(field-> {
-                    if (!this.isAutoGenerate.get(field)) {
-                        return "\t\tres.set"+ToolUtils.convertProp(field)+"(("+columnMap.get(field)+") new ConvertUtil().ConvertToObject(\""+columnMap.get(field)+"\", model.get"+ToolUtils.convertProp(field)+"()));\n";
+                    if (!this._isAutoGenerate.get(field)) {
+                        return "\t\tres.set"+ToolUtils.convertProp(field)+"(("+ _columnMap.get(field)+") new ConvertUtil().ConvertToObject(\""+ _columnMap.get(field)+"\", model.get"+ToolUtils.convertProp(field)+"()));\n";
                     }
                     return "";
                 })
@@ -137,7 +136,7 @@ public class SceneGenerator implements Generatable {
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%getFieldToCreateVM%", getFieldToCreateVM);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%getFieldOfData%", getFieldOfData);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%annotationFXML%", annotationFXML);
-        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%table%", table);
+        finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%table%", _table);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%switchFunction%", switchFunction);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%column%", column);
         finalPersistenceContent = StringUtils.replace(finalPersistenceContent, "%addColumn%", addColumn);

@@ -4,35 +4,35 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 public abstract class BaseDao<T, E> {
-    EntityManager entityManager = EntityManagerProvider.createEntityManager();
+    EntityManager _entityManager = EntityManagerProvider.createEntityManager();
 
     public void insert(T... objects) {
-        entityManager.getTransaction().begin();
+        _entityManager.getTransaction().begin();
         for (T object : objects) {
-            entityManager.persist(object);
+            _entityManager.persist(object);
         }
-        entityManager.getTransaction().commit();
+        _entityManager.getTransaction().commit();
     }
 
     public T getById(E id) {
-        return entityManager.find(getClazz(), id);
+        return _entityManager.find(getClazz(), id);
     }
 
     public List<T> getAll() {
-        return entityManager.createQuery("SELECT obj FROM " + getClazz().getSimpleName() + " obj", getClazz())
+        return _entityManager.createQuery("SELECT obj FROM " + getClazz().getSimpleName() + " obj", getClazz())
                             .getResultList();
     }
 
     public void delete(T... objects) {
-        entityManager.getTransaction().begin();
+        _entityManager.getTransaction().begin();
         for (T object : objects) {
-            entityManager.remove(entityManager.contains(object) ? object : entityManager.merge(object));
+            _entityManager.remove(_entityManager.contains(object) ? object : _entityManager.merge(object));
         }
-        entityManager.getTransaction().commit();
+        _entityManager.getTransaction().commit();
     }
 
     public void close() {
-        entityManager.close();
+        _entityManager.close();
     }
 
     protected abstract Class<T> getClazz();
