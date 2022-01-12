@@ -46,6 +46,8 @@ public class ConfigScreen implements Initializable {
 
     @FXML
     private JFXButton _browseButton;
+    @FXML
+    private JFXButton _backButton;
 
     private SqlServer _sqlServer;
 

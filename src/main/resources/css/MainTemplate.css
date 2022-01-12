@@ -9,19 +9,25 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
 }
 
-#btnLogin{
+#btnLogin, #loginButton {
     -fx-background-color: #2B237C;
     -fx-text-fill: #FFFFFF;
     -fx-background-radius: 10px;
 }
 
-#btnLogin:hover {
-  -fx-background-color: #0F054C;
-  -fx-cursor: hand;
+#btnLogin:hover, #loginButton:hover {
+    -fx-background-color: #0F054C;
+    -fx-cursor: hand;
 }
 
-#btnLogin:pressed {
-  -fx-background-color: #0F054C;
+#btnLogin:pressed, #loginButton:pressed {
+    -fx-background-color: #0F054C;
+}
+#registerButton:hover, #deleteButton:hover, #approveButton:hover, #addButton:hover, #minimizeButton:hover, #closeButton: hover {
+    -fx-cursor: hand;
+}
+JFXListView Label, #profilePicture {
+    -fx-cursor: hand;
 }
 
 #root {

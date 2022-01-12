@@ -67,7 +67,7 @@
                               <Font size="14.0" />
                            </font>
                         </JFXPasswordField>
-                        <JFXButton fx:id="loginButton" buttonType="RAISED" defaultButton="true" layoutX="42.0" layoutY="252.0" onAction="#login" prefHeight="36.0" prefWidth="360.0" style="-fx-background-color: #2B237C; -fx-text-fill: #FFFFFF; -fx-background-radius: 10;" text="Login" textAlignment="CENTER">
+                        <JFXButton fx:id="loginButton" buttonType="RAISED" defaultButton="true" layoutX="42.0" layoutY="252.0" onAction="#login" prefHeight="36.0" prefWidth="360.0" text="Login" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
