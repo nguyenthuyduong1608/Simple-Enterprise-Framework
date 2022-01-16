@@ -134,8 +134,10 @@ public class %table%Scene extends BaseSceneTemplate implements Initializable {
         if (isUpdate) {
             try{
                 %table%Dao dao = new %table%Dao();
-                dao.delete(list.get(table.getSelectionModel().getSelectedIndex()));
-                dao.insert(convertFromViewModelToEntity(getViewModel()));
+                %table% old  = list.get(table.getSelectionModel().getSelectedIndex());
+                %table% newObj = convertFromViewModelToEntity(getViewModel());
+                dao.merge(old, newObj);
+                dao.update(old);
                 fetchData();
                 SceneUtils.getInstance().showDialog(this.rootPane, "Success", "Edit database success");
                 //dao.close();
