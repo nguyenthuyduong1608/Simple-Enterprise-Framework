@@ -51,7 +51,11 @@ public class FXMLGenerator implements Generatable {
                                 +"<VBox.margin>" +"\n"
                                 +    "<Insets />" +"\n"
                                 +"</VBox.margin>" + "\n"
+                                +"<font>"+"\n"
+                                +"<Font size=\"14.0\" />" +"\n"
+                                +"</font>"+"\n"
                                 +"</JFXTextField>";
+
                     }
                     return "";
                 })
@@ -59,8 +63,11 @@ public class FXMLGenerator implements Generatable {
 
         String strListTable = _listTable
                 .stream()
-                .map(table ->
-                               " <Label text=\""+table+"\" onMouseClicked=\"#switch_"+table+"_Scene\" prefHeight=\"32.0\" prefWidth=\"176.0\" />\n"
+                .map(table ->  "<Label text=\""+table+"\" onMouseClicked=\"#switch_"+table+"_Scene\" prefHeight=\"32.0\" prefWidth=\"176.0\" >\n"
+                                + "<font>" + "\n"
+                                + "<Font size=\"14.0\" />" +"\n"
+                                + "</font>" + "\n"
+                                + "</Label>" +"\n"
                 )
                 .reduce("", (a, b) -> a + b);
 

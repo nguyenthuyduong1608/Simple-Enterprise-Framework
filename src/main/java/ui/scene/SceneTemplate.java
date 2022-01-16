@@ -48,10 +48,6 @@ public class SceneTemplate extends BaseSceneTemplate implements Initializable {
     @FXML
     private JFXButton approveButton;
     @FXML
-    private JFXButton settingButton;
-    @FXML
-    private JFXButton searchButton;
-    @FXML
     private ImageView profilePicture;
     @FXML
     private JFXListView tableList;
@@ -156,19 +152,17 @@ public class SceneTemplate extends BaseSceneTemplate implements Initializable {
         this.rootPane.setCache(true);
 
         this.deleteButton.setGraphic(new ImageView("/images/delete.png"));
-        this.searchButton.setGraphic(new ImageView("/images/search.png"));
-        this.settingButton.setGraphic(new ImageView("/images/settings.png"));
         this.addButton.setGraphic(new ImageView("/images/add.png"));
 
-        TreeTableColumn<ViewModelTemplate, String> col1 = new JFXTreeTableColumn<>("Column 1");
+        TreeTableColumn<ViewModelTemplate, String> col1 = new JFXTreeTableColumn<>("MSSV");
         col1.setSortable(false);
         col1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue().getField1()));
 
-        TreeTableColumn<ViewModelTemplate, String> col2 = new JFXTreeTableColumn<>("Column 2");
+        TreeTableColumn<ViewModelTemplate, String> col2 = new JFXTreeTableColumn<>("Ho va Ten");
         col2.setSortable(false);
         col2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue().getField2()));
 
-        TreeTableColumn<ViewModelTemplate, String> col3 = new JFXTreeTableColumn<>("Column 3");
+        TreeTableColumn<ViewModelTemplate, String> col3 = new JFXTreeTableColumn<>("Diem");
         col3.setSortable(false);
         col3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue().getField3()));
 
@@ -184,10 +178,11 @@ public class SceneTemplate extends BaseSceneTemplate implements Initializable {
     }
 
     private void initData() {
-        data.add(new ViewModelTemplate("1", "Nguyen Tuan Dat", "10"));
-        data.add(new ViewModelTemplate("2", "Ngo Minh Nghia", "10"));
-        data.add(new ViewModelTemplate("3", "Nguyen Van Thang", "10"));
-        data.add(new ViewModelTemplate("4", "Nguyen Bao Phat", "10"));
+        data.add(new ViewModelTemplate("18120161", "Nguyen Cong Danh", "10"));
+        data.add(new ViewModelTemplate("18120165", "Nguyen Ngoc Duc", "10"));
+        data.add(new ViewModelTemplate("18120169", "Nguyen Thuy Duong", "10"));
+        data.add(new ViewModelTemplate("18120172", "Nguyen Thanh Minh Duy", "10"));
+        data.add(new ViewModelTemplate("18120175", "Nguyen Vu Ha", "10"));
     }
 
     private void logOut(ActionEvent event) {

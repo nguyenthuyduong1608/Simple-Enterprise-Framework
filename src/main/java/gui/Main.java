@@ -19,7 +19,7 @@ public class Main extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/css/MainTemplate.css").toExternalForm());
-        primaryStage.setTitle("CRUD Generation");
+        primaryStage.setTitle("SEP Framework Generation");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

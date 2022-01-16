@@ -27,7 +27,7 @@ public class MainTemplate extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource(_LOGIN_SCENE_FXML));
-        primaryStage.setTitle("CRUD Framework version 1.0");
+        primaryStage.setTitle("SEP Framework Version 1.0");
         primaryStage.centerOnScreen();
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
