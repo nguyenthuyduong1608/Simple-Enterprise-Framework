@@ -43,7 +43,7 @@ public class LoginScreen implements Initializable {
 
             if (databases.isEmpty()) {
                 Platform.runLater(() -> {
-                    Utils.setAlert(_root, "Oops... Something wrong", "Can't connect to database");
+                    Utils.setAlert(_root, "Oops... Something wrong", "Can't connect to database !");
                 });
             } else {
                 Platform.runLater(() -> {

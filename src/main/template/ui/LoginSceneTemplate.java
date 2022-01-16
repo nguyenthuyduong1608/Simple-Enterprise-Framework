@@ -46,7 +46,7 @@ public class LoginSceneTemplate extends BaseSceneTemplate implements Initializab
 
         // Handle not null
         if(strUsername.isEmpty() || strPassword.isEmpty()){
-            SceneUtils.getInstance().showDialog(rootPane, "Login", "There are at least one field is empty");
+            SceneUtils.getInstance().showDialog(rootPane, "Warning", "At least one field is empty. Please enter all fields !");
             return;
         }
 
@@ -56,7 +56,7 @@ public class LoginSceneTemplate extends BaseSceneTemplate implements Initializab
                 Users user = dao.getById(strUsername);
                 System.out.println((user!=null)?user.getPassword():"null");
                 if(user == null || !user.getPassword().equals(strPassword)){
-                    Platform.runLater(()->SceneUtils.getInstance().showDialog(rootPane, "Login", "Username or Password are incorrect"));
+                    Platform.runLater(()->SceneUtils.getInstance().showDialog(rootPane, "Error", "Username or Password is incorrect"));
                 } else {
                     UserManagement.getInstance().login(user);
                     SceneUtils.getInstance().switchScreen(this.rootPane, "/fxml/%demo%Scene.fxml", 100);

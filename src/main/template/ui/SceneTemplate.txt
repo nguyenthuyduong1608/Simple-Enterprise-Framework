@@ -51,10 +51,6 @@ public class %table%Scene extends BaseSceneTemplate implements Initializable {
     @FXML
     JFXButton approveButton;
     @FXML
-    private JFXButton searchButton;
-    @FXML
-    private JFXButton settingButton;
-    @FXML
     private ImageView profilePicture;
 
     private List<%table%> list;
@@ -199,8 +195,6 @@ public class %table%Scene extends BaseSceneTemplate implements Initializable {
         this.rootPane.setCache(true);
 
         this.deleteButton.setGraphic(new ImageView("/images/delete.png"));
-        this.searchButton.setGraphic(new ImageView("/images/search.png"));
-        this.settingButton.setGraphic(new ImageView("/images/settings.png"));
         this.addButton.setGraphic(new ImageView("/images/add.png"));
 
         %column%
