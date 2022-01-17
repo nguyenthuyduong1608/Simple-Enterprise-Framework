@@ -19,8 +19,4 @@ public class ResGenerator implements Generatable {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        new ResGenerator().generate(new File("C:\\Users\\nghia\\Desktop\\KHTN-4-1\\OOP\\hibernate"));
-    }
 }

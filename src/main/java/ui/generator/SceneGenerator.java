@@ -153,7 +153,4 @@ public class SceneGenerator implements Generatable {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) {
-
-    }
 }
